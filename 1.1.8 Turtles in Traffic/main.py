@@ -1,7 +1,3 @@
-# I just noticed you removed the 1.1.8 module so I'm not sure if we're supposed to do this but I did it anyways
-
-# ----------------
-
 #Try to implement the extra features outlined in the textbook.
 #I have made adjustments so your turtles will not fly off the screen.
 #I have put how to change the screen size and background color if you would like to experiment with that.
@@ -18,9 +14,9 @@ Recover- 2'''
 
 # ----------------
 
-import random # will be used for randomizing speeds
+import random # will be used for randomizing speeds and colors
 import turtle as trtl
-trtl.screensize(canvwidth=500, canvheight=500, bg="yellow")
+trtl.screensize(canvwidth=500, canvheight=500, bg="lightgray")
 print(trtl.screensize())
 
 # Create two empty lists of turtles, adding to them later
@@ -31,7 +27,7 @@ vert_turtles = []
 speeds = []
 
 # Use interesting shapes and colors
-turtle_shapes = ["arrow", "turtle", "circle", "square", "triangle", "classic"]
+turtle_shapes = ["arrow", "turtle", "classic", "square", "triangle"]
 horiz_colors = ["red", "blue", "green", "orange", "purple", "gold"]
 vert_colors = ["darkred", "darkblue", "lime", "salmon", "indigo", "brown"]
 
@@ -67,10 +63,25 @@ while steps < 50:
     for index, htl in enumerate(horiz_turtles):
         for index2, vtl in enumerate(vert_turtles):
 
-            # If turtles xcor AND ycor are less than 20, remove them from the list
+            # If turtles xcor AND ycor are less than 20, change their shape + color and move them back a few steps
             if abs(htl.xcor() - vtl.xcor()) < 20 and abs(htl.ycor() - vtl.ycor()) < 20:
-                horiz_turtles.remove(htl) 
-                vert_turtles.remove(vtl)
+
+                # Change shape and color
+                htl.color("gray")
+                vtl.color("gray")
+                htl.shape("circle")
+                vtl.shape("circle")
+
+                # Reset them back a few different units so they don't crash again (hopefully, it depends on speed too)
+                # These turtles are not the greatest drivers, so they might end up crashing into each other a few more times before continuing on their journey
+                for i in range(4): 
+                    htl.back(random.randint(2, 12))
+                    vtl.back(random.randint(2, 12))   
+
+                # Color change the turtles after a crash, but stay as circle to let user know they crashed
+                htl.color(random.randint(0, 255) / 255, random.randint(0, 255) / 255, random.randint(0, 255) / 255)
+                vtl.color(random.randint(0, 255) / 255, random.randint(0, 255) / 255, random.randint(0, 255) / 255)
+                
 
             # Move forward by the speed at the index (between 1 and 5 steps)
             htl.forward(speeds[index])
@@ -79,5 +90,14 @@ while steps < 50:
     # Increment steps
     steps = steps + 1
  
+# Change color of each turtle to black once it's done.
+for htl in horiz_turtles:
+    htl.color("black")
+print("Horizontal turtles deactivated.")
+for vtl in vert_turtles:
+    vtl.color("black")
+print("Vertical turtles deactivated.")
+
+# Start program
 wn = trtl.Screen()
 wn.mainloop()
